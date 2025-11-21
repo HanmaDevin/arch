@@ -7,11 +7,11 @@
 #                                                  /_/
 clear
 
-from="$HOME/hyprdev"
+from="$HOME/endeos"
 cfgPath="$from/.config"
 
 installPackages() {
-  local packages=("gum" "network-manager-applet" "networkmanager-openvpn" "zip" "man" "libreoffice" "rust-src" "mpv-mpris" "fastfetch" "glow" "swww" "ntfs-3g" "tree" "discord" "lazygit" "ufw" "zsh" "unzip" "wget" "yazi" "neovim" "eza" "btop" "gamemode" "steam" "mangohud" "zoxide" "fzf" "bat" "jdk21-openjdk" "docker" "ripgrep" "cargo" "fd" "starship" "rust-analyzer" "bluez" "bluez-utils" "networkmanager" "brightnessctl" "wine" "bluez-obex" "python-pip" "python-requests" "python-pipx" "pavucontrol" "openssh" "pam-u2f" "pipewire" "pipewire-pulse" "pipewire-alsa" "pipewire-jack" "pamixer" "ttf-font-awesome" "ttf-nerd-fonts-symbols" "ttf-jetbrains-mono-nerd" "noto-fonts-emoji" "wireplumber" "libfido2" "qt5-wayland" "qt6-wayland" "xdg-desktop-portal-gtk" "xdg-desktop-portal-wlr" "gdb" "qt5-quickcontrols" "qt5-quickcontrols2" "qt5-graphicaleffects" "blueman" "pacman-contrib" "libimobiledevice" "usbmuxd" "gvfs-gphoto2" "ifuse" "python-dotenv" "openvpn" "ncdu" "texlive" "lynx" "inetutils" "net-tools" "wl-clipboard" "jq" "nodejs" "npm" "nm-connection-editor" "github-cli" "protonmail-bridge" "waybar" "proton-vpn-gtk-app" "systemd-resolved" "wireguard-tools")
+  local packages=("gum" "go" "network-manager-applet" "networkmanager-openvpn" "zip" "man" "libreoffice" "rust-src" "mpv-mpris" "fastfetch" "glow" "swww" "ntfs-3g" "tree" "discord" "lazygit" "ufw" "zsh" "unzip" "wget" "yazi" "neovim" "eza" "btop" "gamemode" "steam" "mangohud" "zoxide" "fzf" "bat" "jdk21-openjdk" "docker" "ripgrep" "cargo" "fd" "starship" "rust-analyzer" "bluez" "bluez-utils" "networkmanager" "brightnessctl" "wine" "bluez-obex" "python-pip" "python-requests" "python-pipx" "pavucontrol" "openssh" "pam-u2f" "pipewire" "pipewire-pulse" "pipewire-alsa" "pipewire-jack" "pamixer" "ttf-font-awesome" "ttf-nerd-fonts-symbols" "ttf-jetbrains-mono-nerd" "noto-fonts-emoji" "wireplumber" "libfido2" "qt5-wayland" "qt6-wayland" "xdg-desktop-portal-gtk" "xdg-desktop-portal-wlr" "gdb" "qt5-quickcontrols" "qt5-quickcontrols2" "qt5-graphicaleffects" "blueman" "pacman-contrib" "libimobiledevice" "usbmuxd" "gvfs-gphoto2" "ifuse" "python-dotenv" "openvpn" "ncdu" "texlive" "lynx" "inetutils" "net-tools" "wl-clipboard" "jq" "nodejs" "npm" "nm-connection-editor" "github-cli" "protonmail-bridge" "waybar" "proton-vpn-gtk-app" "systemd-resolved" "wireguard-tools")
   for pkg in "${packages[@]}"; do
     sudo pacman -S --noconfirm "$pkg"
   done
@@ -86,7 +86,7 @@ copy_config() {
   cp "$from/.zshrc" "$HOME/"
   cp -r "$cfgPath" "$HOME/"
   get_wallpaper
-  
+
   sudo cp -r "$from/Cursor/Bibata-Modern-Ice" "/usr/share/icons"
   sudo cp -r "$from/fonts/" "/usr/share"
 
@@ -125,7 +125,7 @@ cat <<"EOF"
 
 EOF
 
-echo "HanmaDevin HyprLand Setup"
+echo "HanmaDevin Setup"
 echo -e "${NONE}"
 while true; do
   read -r -p ">>> Do you want to start the installation now? (y/n): " yn
