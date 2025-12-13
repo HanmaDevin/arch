@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #     ____           __        ____   _____           _       __
 #    /  _/___  _____/ /_____ _/ / /  / ___/__________(_)___  / /_
 #    / // __ \/ ___/ __/ __ `/ / /   \__ \/ ___/ ___/ / __ \/ __/
@@ -7,18 +7,22 @@
 #                                                  /_/
 clear
 
-from="$HOME/endeos"
-cfgPath="$from/.config"
+REPO="$HOME/endeos"
+CFG_PATH="$REPO/.config"
 
 installPackages() {
-  local packages=("gum" "go" "network-manager-applet" "networkmanager-openvpn" "zip" "man" "libreoffice" "rust-src" "mpv-mpris" "fastfetch" "glow" "swww" "ntfs-3g" "tree" "discord" "lazygit" "ufw" "zsh" "unzip" "wget" "yazi" "neovim" "eza" "btop" "gamemode" "steam" "mangohud" "zoxide" "fzf" "bat" "jdk21-openjdk" "docker" "ripgrep" "cargo" "fd" "starship" "rust-analyzer" "bluez" "bluez-utils" "networkmanager" "brightnessctl" "wine" "bluez-obex" "python-pip" "python-requests" "python-pipx" "pavucontrol" "openssh" "pam-u2f" "pipewire" "pipewire-pulse" "pipewire-alsa" "pipewire-jack" "pamixer" "ttf-font-awesome" "ttf-nerd-fonts-symbols" "ttf-jetbrains-mono-nerd" "noto-fonts-emoji" "wireplumber" "libfido2" "qt5-wayland" "qt6-wayland" "xdg-desktop-portal-gtk" "xdg-desktop-portal-wlr" "gdb" "qt5-quickcontrols" "qt5-quickcontrols2" "qt5-graphicaleffects" "blueman" "pacman-contrib" "libimobiledevice" "usbmuxd" "gvfs-gphoto2" "ifuse" "python-dotenv" "openvpn" "ncdu" "texlive" "lynx" "inetutils" "net-tools" "wl-clipboard" "jq" "nodejs" "npm" "nm-connection-editor" "github-cli" "protonmail-bridge" "waybar" "proton-vpn-gtk-app" "systemd-resolved" "wireguard-tools")
+  sudo pacman -Syu
+
+  local packages=("gum" "go" "network-manager-applet" "networkmanager-openvpn" "zip" "man" "libreoffice" "mpv-mpris" "fastfetch" "glow" "ntfs-3g" "tree" "lazygit" "ufw" "zsh" "unzip" "wget" "neovim" "eza" "gamemode" "steam" "zoxide" "fzf" "bat" "jdk21-openjdk" "docker" "docker-compose" "ufw-docker" "ripgrep" "rustup" "fd" "starship" "rust-analyzer" "bluez" "bluez-utils" "networkmanager" "brightnessctl" "wine" "bluez-obex" "python-pip" "python-requests" "python-pipx" "openssh" "pam-u2f" "pipewire" "pipewire-pulse" "pipewire-alsa" "pipewire-jack" "pamixer" "ttf-font-awesome" "ttf-nerd-fonts-symbols" "ttf-jetbrains-mono-nerd" "noto-fonts-emoji" "wireplumber" "libfido2" "qt5-wayland" "qt6-wayland" "xdg-desktop-portal-gtk" "xdg-desktop-portal-wlr" "gdb" "qt5-quickcontrols" "qt5-quickcontrols2" "qt5-graphicaleffects" "pacman-contrib" "libimobiledevice" "usbmuxd" "gvfs-gphoto2" "ifuse" "python-dotenv" "openvpn" "ncdu" "texlive" "inetutils" "net-tools" "wl-clipboard" "jq" "nodejs" "npm" "nm-connection-editor" "github-cli" "protonmail-bridge" "proton-vpn-gtk-app" "systemd-resolved" "wireguard-tools")
   for pkg in "${packages[@]}"; do
     sudo pacman -S --noconfirm "$pkg"
   done
+
+  rustup default stable
 }
 
 installAurPackages() {
-  local packages=("google-chrome" "xwaylandvideobridge" "openvpn-update-systemd-resolved" "lazydocker" "qt-heif-image-plugin" "luajit-tiktoken-bin" "ani-cli")
+  local packages=("google-chrome" "vesktop" "xwaylandvideobridge" "openvpn-update-systemd-resolved" "lazydocker" "qt-heif-image-plugin" "luajit-tiktoken-bin" "ani-cli")
   for pkg in "${packages[@]}"; do
     yay -S --noconfirm "$pkg"
   done
@@ -28,8 +32,8 @@ installDeepCoolDriver() {
   echo ">>> Do you want to install DeepCool CPU-Fan driver?"
   deepcool=$(gum choose "Yes" "No")
   if [[ "$deepcool" == "Yes" ]]; then
-    sudo cp "$from/DeepCool/deepcool-digital-linux" "/usr/sbin"
-    sudo cp "$from/DeepCool/deepcool-digital.service" "/etc/systemd/system/"
+    sudo cp "$REPO/DeepCool/deepcool-digital-linux" "/usr/sbin"
+    sudo cp "$REPO/DeepCool/deepcool-digital.service" "/etc/systemd/system/"
     sudo systemctl enable deepcool-digital
   fi
 }
@@ -56,9 +60,9 @@ get_wallpaper() {
   echo ">>> Do you want to download cool wallpaper?"
   local ans=$(gum choose "Yes" "No")
   if [[ "$ans" == "Yes" ]]; then
-    git clone "https://github.com/lixdroid-sys/WallFlex.git" "$HOME/WallFlex"
-    cp -r "$HOME/WallFlex/wallpaper/" "$HOME/Pictures/Wallpaper/"
-    rm -rf "$HOME/WallFlex/"
+    git clone "https://github.com/HanmaDevin/Wallpapes.git" "$HOME/Wallpapes"
+    cp -r "$HOME/Wallpapes" "$HOME/Pictures/Wallpaper/"
+    rm -rf "$HOME/Wallpapes/"
   fi
 }
 
@@ -83,21 +87,19 @@ copy_config() {
     mkdir -p "$HOME/Pictures/Screenshots/"
   fi
 
-  cp "$from/.zshrc" "$HOME/"
-  cp -r "$cfgPath" "$HOME/"
+  cp "$REPO/.zshrc" "$HOME/"
+  cp -r "$CFG_PATH" "$HOME/"
   get_wallpaper
 
-  sudo cp -r "$from/Cursor/Bibata-Modern-Ice" "/usr/share/icons"
-  sudo cp -r "$from/fonts/" "/usr/share"
-
-  sudo cp -r "$from/icons/" "/usr/share/"
+  sudo cp -r "$REPO/fonts/" "/usr/share"
+  sudo cp -r "$REPO/icons/" "/usr/share/"
 
   echo ">>> Want to install Vencord?"
   vencord=$(gum choose "Yes" "No")
 
   if [[ "$vencord" == "Yes" ]]; then
-    bash "$from/Vencord/VencordInstaller.sh"
-    cp -r "$from/Vencord/themes/" "$HOME/.config/Vencord/"
+    bash "$REPO/Vencord/VencordInstaller.sh"
+    cp -r "$REPO/Vencord/themes/" "$HOME/.config/vesktop/"
   fi
 
   echo ">>> Trying to change the shell..."
@@ -106,10 +108,29 @@ copy_config() {
 
 setup_ufw() {
   gum spin --spinner dot --title "Trying to setup firewall (ufw)..." -- sleep 2
-  sudo ufw enable
+  gum spin --spinner dot --title "Firewall Setup..." -- sleep 2
+  # Allow nothing in, everything out
   sudo ufw default deny incoming
   sudo ufw default allow outgoing
-  sudo ufw status
+
+  # Allow ports for LocalSend
+  sudo ufw allow 53317/udp
+  sudo ufw allow 53317/tcp
+
+  # Allow Docker containers to use DNS on host
+  sudo ufw allow in proto udp from 172.16.0.0/12 to 172.17.0.1 port 53 comment 'allow-docker-dns'
+
+  # Turn on the firewall
+  sudo ufw --force enable
+
+  # Enable UFW systemd service to start on boot
+  sudo systemctl enable ufw
+
+  # Turn on Docker protections
+  sudo ufw-docker install
+  sudo ufw reload
+
+  gum spin --spinner "globe" --title "Done! Press any key to close..." -- bash -c 'read -n 1 -s'
 }
 
 MAGENTA='\033[0;35m'
@@ -144,8 +165,6 @@ while true; do
     ;;
   esac
 done
-
-sudo pacman -Syu
 
 echo ">>> Installing required packages..."
 installPackages

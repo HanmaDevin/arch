@@ -118,7 +118,6 @@ alias get="yay -S --noconfirm"
 alias remove="yay -Rns --noconfirm"
 alias update="yay -Syu --noconfirm"
 alias search="yay -Slq | fzf --multi --preview 'yay -Sii {1}'"
-alias yayf="yay -Slq | fzf --multi --preview 'yay -Sii {1}' | xargs -ro yay -S"
 
 alias copy="wl-copy"
 alias paste="wl-paste"
@@ -129,7 +128,6 @@ alias editmonitor="nvim $HOME/.config/hypr/monitor.conf"
 
 alias editzsh="nvim ~/.zshrc"
 alias lg="lazygit"
-alias lazydocker="sudo lazydocker"
 
 # visual
 alias open="xdg-open"
@@ -144,7 +142,6 @@ alias startdocker="systemctl start docker"
 
 # you may also use the following one
 bindkey -s '^o' 'nvim $(fzf)\n'
-bindkey -s '^e' 'yazi\n'
 
 # python environments
 alias deac="deactivate"
@@ -177,12 +174,38 @@ setopt correct
 setopt notify
 setopt numericglobsort
 
+getin() {
+  local pkg_names
+
+  fzf_args=(
+  --multi
+  --preview 'yay -Sii {1}'
+  --preview-label='alt-p: toggle description, alt-b/B: toggle PKGBUILD, alt-j/k: scroll, tab: multi-select'
+  --preview-label-pos='bottom'
+  --preview-window 'down:65%:wrap'
+  --bind 'alt-p:toggle-preview'
+  --bind 'alt-d:preview-half-page-down,alt-u:preview-half-page-up'
+  --bind 'alt-k:preview-up,alt-j:preview-down'
+  --bind 'alt-b:change-preview:yay -Gpa {1} | tail -n +5'
+  --bind 'alt-B:change-preview:yay -Siia {1}'
+  --color 'pointer:green,marker:green'
+  )
+
+  pkg_names=$(yay -Slq | fzf "${fzf_args[@]}")
+
+  if [[ -n "$pkg_names" ]]; then
+    # Convert newline-separated selections to space-separated for yay
+    echo "$pkg_names" | tr '\n' ' ' | xargs yay -S --noconfirm
+    echo
+    gum spin --spinner "globe" --title "Done! Press any key to close..." -- bash -c 'read -n 1 -s'
+  fi
+}
+
 extract() {
   local arch="$1"
+  local dest="$PWD"
   if [ -n "$2" ]; then
-    local dest="$2"
-  else
-    local dest="$HOME"
+    dest="$2"
   fi
   if [ -f "$arch" ]; then
     case $arch in 
@@ -193,8 +216,7 @@ extract() {
       *.tbz2) tar xvjf $arch -C "$dest" ;;
       *.tgz) tar xvzf $arch -C "$dest" ;;
       *.zip) unzip $arch -d "$dest" ;;
-      *.tar.gz) tar xvzf $arch -C "$dest" ;;
-      *.tar.gz) tar xvzf $arch -C "$dest" ;;
+      *.gz) gunizp $arch ;;
       *) echo "Do not know how to extract for now :(" ;;
     esac
   else
