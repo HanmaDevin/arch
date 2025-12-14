@@ -29,6 +29,7 @@ installAurPackages() {
 }
 
 installDeepCoolDriver() {
+  local deepcool
   echo ">>> Do you want to install DeepCool CPU-Fan driver?"
   deepcool=$(gum choose "Yes" "No")
   if [[ "$deepcool" == "Yes" ]]; then
@@ -39,6 +40,7 @@ installDeepCoolDriver() {
 }
 
 configure_git() {
+  local answer ssh username useremail
   echo ">>> Want to configure git?"
   answer=$(gum choose "Yes" "No")
   if [[ "$answer" == "Yes" ]]; then
@@ -57,8 +59,9 @@ configure_git() {
 }
 
 get_wallpaper() {
+  local ans
   echo ">>> Do you want to download cool wallpaper?"
-  local ans=$(gum choose "Yes" "No")
+  ans=$(gum choose "Yes" "No")
   if [[ "$ans" == "Yes" ]]; then
     git clone "https://github.com/HanmaDevin/Wallpapes.git" "$HOME/Wallpapes"
     cp -r "$HOME/Wallpapes" "$HOME/Pictures/Wallpaper/"
@@ -161,12 +164,11 @@ done
 
 echo ">>> Installing required packages..."
 installPackages
-installYay
 installAurPackages
+installDeepCoolDriver
 
 gum spin --spinner dot --title "Starting setup now..." -- sleep 2
 copy_config
-installDeepCoolDriver
 configure_git
 setup_ufw
 
