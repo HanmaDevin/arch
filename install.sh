@@ -13,7 +13,7 @@ CFG_PATH="$REPO/.config"
 installPackages() {
   sudo pacman -Syu
 
-  local packages=("gum" "go" "network-manager-applet" "networkmanager-openvpn" "zip" "man" "libreoffice" "mpv-mpris" "fastfetch" "glow" "ntfs-3g" "tree" "lazygit" "ufw" "zsh" "unzip" "wget" "neovim" "eza" "gamemode" "steam" "zoxide" "fzf" "bat" "jdk21-openjdk" "docker" "docker-compose" "ufw-docker" "ripgrep" "rustup" "fd" "starship" "rust-analyzer" "bluez" "bluez-utils" "networkmanager" "brightnessctl" "wine" "bluez-obex" "python-pip" "python-requests" "python-pipx" "openssh" "pam-u2f" "pipewire" "pipewire-pulse" "pipewire-alsa" "pipewire-jack" "pamixer" "ttf-font-awesome" "ttf-nerd-fonts-symbols" "ttf-jetbrains-mono-nerd" "noto-fonts-emoji" "wireplumber" "libfido2" "qt5-wayland" "qt6-wayland" "xdg-desktop-portal-gtk" "xdg-desktop-portal-wlr" "gdb" "qt5-quickcontrols" "qt5-quickcontrols2" "qt5-graphicaleffects" "pacman-contrib" "libimobiledevice" "usbmuxd" "gvfs-gphoto2" "ifuse" "python-dotenv" "openvpn" "ncdu" "texlive" "inetutils" "net-tools" "wl-clipboard" "jq" "nodejs" "npm" "nm-connection-editor" "github-cli" "protonmail-bridge" "proton-vpn-gtk-app" "systemd-resolved" "wireguard-tools")
+  local packages=("gum" "go" "network-manager-applet" "networkmanager-openvpn" "zip" "man" "libreoffice" "mpv-mpris" "fastfetch" "glow" "ntfs-3g" "tree" "lazygit" "ufw" "zsh" "unzip" "wget" "neovim" "eza" "gamemode" "steam" "zoxide" "fzf" "bat" "jdk21-openjdk" "docker" "docker-compose" "ripgrep" "rustup" "fd" "starship" "rust-analyzer" "bluez" "bluez-utils" "networkmanager" "brightnessctl" "wine" "bluez-obex" "python-pip" "python-requests" "python-pipx" "openssh" "pam-u2f" "pipewire" "pipewire-pulse" "pipewire-alsa" "pipewire-jack" "pamixer" "ttf-font-awesome" "ttf-nerd-fonts-symbols" "ttf-jetbrains-mono-nerd" "noto-fonts-emoji" "wireplumber" "libfido2" "qt5-wayland" "qt6-wayland" "xdg-desktop-portal-gtk" "xdg-desktop-portal-wlr" "gdb" "qt5-quickcontrols" "qt5-quickcontrols2" "qt5-graphicaleffects" "pacman-contrib" "libimobiledevice" "usbmuxd" "gvfs-gphoto2" "ifuse" "python-dotenv" "openvpn" "ncdu" "texlive" "inetutils" "net-tools" "wl-clipboard" "jq" "nodejs" "npm" "nm-connection-editor" "github-cli" "protonmail-bridge" "proton-vpn-gtk-app" "systemd-resolved" "wireguard-tools")
   for pkg in "${packages[@]}"; do
     sudo pacman -S --noconfirm "$pkg"
   done
@@ -22,7 +22,7 @@ installPackages() {
 }
 
 installAurPackages() {
-  local packages=("google-chrome" "vesktop" "xwaylandvideobridge" "openvpn-update-systemd-resolved" "lazydocker" "qt-heif-image-plugin" "luajit-tiktoken-bin" "ani-cli")
+  local packages=("google-chrome" "localsend" "ufw-docker" "vesktop" "xwaylandvideobridge" "openvpn-update-systemd-resolved" "lazydocker" "qt-heif-image-plugin" "luajit-tiktoken-bin" "ani-cli")
   for pkg in "${packages[@]}"; do
     yay -S --noconfirm "$pkg"
   done
@@ -67,21 +67,15 @@ get_wallpaper() {
 }
 
 copy_config() {
+  local ans vencord
   gum spin --spinner dot --title "Creating bakups..." -- sleep 2
 
-  if [[ -f "$HOME/.zshrc" ]]; then
+  echo "Do you want to create backups?"
+  ans=$(gum choose "Yes" "No")
+  if [[ "$ans" == "Yes" ]]; then
     mv "$HOME/.zshrc" "$HOME/.zshrc.bak"
+    mv "$HOME/.config" "$HOME/.config.bak"
   fi
-
-  gum spin --spinner dot --title "Creating Home..." -- sleep 2
-  mkdir -p "$HOME/Documents/"
-  mkdir -p "$HOME/Music/"
-  mkdir -p "$HOME/Desktop/"
-  mkdir -p "$HOME/Downloads/"
-  mkdir -p "$HOME/Pictures/"
-  mkdir -p "$HOME/Videos/"
-  mkdir -p "$HOME/Templates/"
-  mkdir -p "$HOME/Public/"
 
   if [[ ! -d "$HOME/Pictures/Screenshots/" ]]; then
     mkdir -p "$HOME/Pictures/Screenshots/"
@@ -98,7 +92,6 @@ copy_config() {
   vencord=$(gum choose "Yes" "No")
 
   if [[ "$vencord" == "Yes" ]]; then
-    bash "$REPO/Vencord/VencordInstaller.sh"
     cp -r "$REPO/Vencord/themes/" "$HOME/.config/vesktop/"
   fi
 
