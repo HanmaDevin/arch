@@ -2,22 +2,10 @@
     (
         modifiers: [
             Super,
-        ],
-        key: "Return",
-    ): System(Terminal),
-    (
-        modifiers: [
-            Super,
             Shift,
         ],
         key: "2",
     ): MoveToWorkspace(2),
-    (
-        modifiers: [
-            Super,
-        ],
-        key: "t",
-    ): Disable,
     (
         modifiers: [
             Super,
@@ -28,12 +16,32 @@
         modifiers: [
             Super,
         ],
+        key: "i",
+    ): Spawn("cosmic-settings"),
+    (
+        modifiers: [
+            Ctrl,
+            Shift,
+        ],
+        key: "Escape",
+        description: Some("sysmon"),
+    ): Spawn("observatory"),
+    (
+        modifiers: [
+            Super,
+        ],
         key: "f",
     ): Disable,
     (
         modifiers: [
             Super,
         ],
-        key: "i",
-    ): Spawn("cosmic-settings"),
+        key: "Return",
+    ): System(Terminal),
+    (
+        modifiers: [
+            Super,
+        ],
+        key: "t",
+    ): Disable,
 }

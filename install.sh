@@ -60,15 +60,15 @@ detect_nvidia() {
 }
 
 install_cosmic() {
-  local ans
-  echo ">>> Do you want to install comsic desktop?"
-  ans=$(gum choose "Yes" "No")
-  if [[ "$ans" == "Yes" ]]; then
-    sudo pacman -S --noconfirm "cosmic" "observatory" "kitty"
-  fi
+  sudo pacman -S --noconfirm "cosmic" "observatory" "kitty"
 
   sudo systemctl enable cosmic-greeter
   cp -r "$REPO/Cosmic/.config" "$HOME"
+}
+
+install_hyprdev() {
+  git clone "https://github.com/HanmaDevin/hyprdev.git" "$HOME/hyprdev"
+  bash "$HOME/hyprdev/scripts/install.sh"
 }
 
 installDeepCoolDriver() {
@@ -209,7 +209,19 @@ echo ">>> Installing required packages..."
 installPackages
 installYay
 installAurPackages
-install_cosmic
+
+echo ">>> Which desktop environment do you wich to install?"
+choice=$(gum "Cosmic" "Hyprdev")
+
+case "$choice" in
+"Hyprdev")
+  install_hyprdev
+  ;;
+"Cosmic")
+  install_cosmic
+  ;;
+esac
+
 installDeepCoolDriver
 
 gum spin --spinner dot --title "Starting setup now..." -- sleep 2
