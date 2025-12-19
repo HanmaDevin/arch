@@ -139,6 +139,8 @@ copy_config() {
     cp -r "$REPO/Vencord/themes/" "$HOME/.config/vesktop/"
   fi
 
+  sudo cp "$REPO/etc/pacman.conf" "/etc/pacman.conf"
+
   echo ">>> Trying to change the shell..."
   chsh -s "/bin/zsh"
 }
