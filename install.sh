@@ -64,11 +64,11 @@ install_cosmic() {
   echo ">>> Do you want to install comsic desktop?"
   ans=$(gum choose "Yes" "No")
   if [[ "$ans" == "Yes" ]]; then
-    sudo pacman -S --noconfirm "cosmic" "observatory"
+    sudo pacman -S --noconfirm "cosmic" "observatory" "kitty"
   fi
 
   sudo systemctl enable cosmic-greeter
-  cp -r "$REPO/Cosmic/cosmic" "$HOME/.config"
+  cp -r "$REPO/Cosmic/.config" "$HOME"
 }
 
 installDeepCoolDriver() {
