@@ -106,15 +106,13 @@ alias lt='eza --icons=always --color=always --tree --level=3'
 alias cd="z"
 alias refresh="source ~/.zshrc"
 
-alias rg='rg --color="always"'
-alias fd="fd --color=always"
 alias gclone="gh repo clone"
+alias repolist="gh repo list"
 
 alias v="nvim"
 alias vim="nvim"
 
 # pacman
-alias get="yay -S --noconfirm"
 alias remove="yay -Rns --noconfirm"
 alias update="yay -Syu --noconfirm"
 alias search="yay -Slq | fzf --multi --preview 'yay -Sii {1}'"
@@ -122,12 +120,10 @@ alias search="yay -Slq | fzf --multi --preview 'yay -Sii {1}'"
 alias copy="wl-copy"
 alias paste="wl-paste"
 
-alias editkbd="nvim $HOME/.config/hypr/keyboard.conf"
-alias editkeys="nvim $HOME/.config/hypr/keybinds.conf"
-alias editmonitor="nvim $HOME/.config/hypr/monitor.conf"
-
 alias editzsh="nvim ~/.zshrc"
 alias lg="lazygit"
+
+alias rm="rm -I"
 
 # visual
 alias open="xdg-open"
@@ -136,20 +132,8 @@ alias q="exit"
 
 alias ..='z ..'
 
-alias nmtui="env -u COLORTERM TERM=xterm-old nmtui"
-
-alias startdocker="systemctl start docker"
-
 # you may also use the following one
 bindkey -s '^o' 'nvim $(fzf)\n'
-
-# python environments
-alias deac="deactivate"
-function createnv() {
-  envpath=$1
-  python3 -m venv "$PWD/$envpath"
-  cd "$PWD/$envpath"
-}
 
 # Always mkdir a path (this doesn't inhibit functionality to make a single dir)
 alias mkdir='mkdir -p'
@@ -174,7 +158,7 @@ setopt correct
 setopt notify
 setopt numericglobsort
 
-getin() {
+get() {
   local pkg_names
 
   fzf_args=(
