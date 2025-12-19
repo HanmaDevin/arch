@@ -13,7 +13,7 @@ CFG_PATH="$REPO/.config"
 installPackages() {
   sudo pacman -Syu
 
-  local packages=("gum" "go" "network-manager-applet" "networkmanager-openvpn" "zip" "man" "libreoffice" "mpv-mpris" "fastfetch" "glow" "ntfs-3g" "tree" "lazygit" "ufw" "zsh" "unzip" "wget" "neovim" "eza" "gamemode" "steam" "zoxide" "fzf" "bat" "jdk21-openjdk" "docker" "docker-compose" "ripgrep" "rustup" "fd" "starship" "rust-analyzer" "bluez" "bluez-utils" "networkmanager" "brightnessctl" "wine" "bluez-obex" "python-pip" "python-requests" "python-pipx" "openssh" "pam-u2f" "pipewire" "pipewire-pulse" "pipewire-alsa" "pipewire-jack" "pamixer" "ttf-font-awesome" "ttf-nerd-fonts-symbols" "ttf-jetbrains-mono-nerd" "noto-fonts-emoji" "wireplumber" "libfido2" "qt5-wayland" "qt6-wayland" "xdg-desktop-portal-gtk" "xdg-desktop-portal-wlr" "gdb" "qt5-quickcontrols" "qt5-quickcontrols2" "qt5-graphicaleffects" "pacman-contrib" "libimobiledevice" "usbmuxd" "gvfs-gphoto2" "ifuse" "python-dotenv" "openvpn" "ncdu" "texlive" "inetutils" "net-tools" "wl-clipboard" "jq" "nodejs" "npm" "nm-connection-editor" "github-cli" "protonmail-bridge" "proton-vpn-gtk-app" "systemd-resolved" "wireguard-tools" "partitionmanager" "discord")
+  local packages=("gum" "go" "network-manager-applet" "networkmanager-openvpn" "zip" "man" "libreoffice" "mpv-mpris" "fastfetch" "glow" "ntfs-3g" "tree" "lazygit" "ufw" "zsh" "unzip" "wget" "neovim" "eza" "gamemode" "steam" "zoxide" "fzf" "bat" "jdk21-openjdk" "docker" "docker-compose" "ripgrep" "rustup" "fd" "starship" "rust-analyzer" "bluez" "bluez-utils" "networkmanager" "brightnessctl" "wine" "bluez-obex" "python-pip" "python-requests" "python-pipx" "openssh" "pam-u2f" "pipewire" "pipewire-pulse" "pipewire-alsa" "pipewire-jack" "pamixer" "ttf-font-awesome" "ttf-nerd-fonts-symbols" "ttf-jetbrains-mono-nerd" "noto-fonts-emoji" "wireplumber" "libfido2" "qt5-wayland" "qt6-wayland" "xdg-desktop-portal-gtk" "xdg-desktop-portal-wlr" "gdb" "qt5-quickcontrols" "qt5-quickcontrols2" "qt5-graphicaleffects" "pacman-contrib" "libimobiledevice" "usbmuxd" "gvfs-gphoto2" "ifuse" "python-dotenv" "openvpn" "ncdu" "texlive" "inetutils" "net-tools" "wl-clipboard" "jq" "nodejs" "npm" "nm-connection-editor" "github-cli" "protonmail-bridge" "proton-vpn-gtk-app" "systemd-resolved" "wireguard-tools" "partitionmanager" "discord" "gvfs" "gvfs-nfs" "gvfs-smb" "gvfs-dnssd")
   for pkg in "${packages[@]}"; do
     sudo pacman -S --noconfirm "$pkg"
   done
@@ -26,6 +26,28 @@ installAurPackages() {
   for pkg in "${packages[@]}"; do
     yay -S --noconfirm "$pkg"
   done
+}
+
+installYay() {
+  if ! command -v yay >/dev/null 2>&1; then
+    echo ">>> Yay not installed..."
+    git clone https://aur.archlinux.org/yay.git "$HOME/yay"
+    cd "$HOME/yay"
+    makepkg -si
+    cd ~
+  fi
+}
+
+install_cosmic() {
+  local ans
+  echo ">>> Do you want to install comsic desktop?"
+  ans=$(gum choose "Yes" "No")
+  if [[ "$ans" == "Yes" ]]; then
+    sudo pacman -S --noconfirm "cosmic" "gnome-keyring" "cosmic-icon-theme"
+  fi
+
+  sudo systemctl enable cosmic-greeter
+  cp -r "$REPO/Cosmic/cosmic" "$HOME/.config"
 }
 
 installDeepCoolDriver() {
@@ -162,7 +184,9 @@ done
 
 echo ">>> Installing required packages..."
 installPackages
+installYay
 installAurPackages
+install_cosmic
 installDeepCoolDriver
 
 gum spin --spinner dot --title "Starting setup now..." -- sleep 2
