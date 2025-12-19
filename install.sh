@@ -38,12 +38,33 @@ installYay() {
   fi
 }
 
+detect_nvidia() {
+  local gpu
+  gpu=$(lspci | grep -i '.* vga .* nvidia .*')
+
+  shopt -s nocasematch
+
+  if [[ $gpu == *' nvidia '* ]]; then
+    echo ">>> Nvidia GPU is present"
+    if [[ ! "$(uname -r)" =~ "lts" ]]; then
+      gum spin --spinner dot --title "Installaling nvidia drivers now..." -- sleep 2
+      sudo pacman -S --noconfirm nvidia nvidia-utils nvidia-settings
+    else
+      gum spin --spinner dot --title "Installaling nvidia drivers now..." -- sleep 2
+      sudo pacman -S --noconfirm nvidia-lts nvidia-utils nvidia-settings
+    fi
+  else
+    echo ">>> It seems you are not using a Nvidia GPU"
+    echo ">>> If you have a Nvidia GPU then download the drivers yourself please :)"
+  fi
+}
+
 install_cosmic() {
   local ans
   echo ">>> Do you want to install comsic desktop?"
   ans=$(gum choose "Yes" "No")
   if [[ "$ans" == "Yes" ]]; then
-    sudo pacman -S --noconfirm "cosmic" "gnome-keyring" "cosmic-icon-theme"
+    sudo pacman -S --noconfirm "cosmic" "observatory"
   fi
 
   sudo systemctl enable cosmic-greeter
@@ -114,7 +135,7 @@ copy_config() {
   vencord=$(gum choose "Yes" "No")
 
   if [[ "$vencord" == "Yes" ]]; then
-    bash "$REPO/VencordInstaller.sh"
+    bash "$REPO/Vencord/VencordInstaller.sh"
     cp -r "$REPO/Vencord/themes/" "$HOME/.config/vesktop/"
   fi
 
