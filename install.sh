@@ -7,7 +7,7 @@
 #                                                  /_/
 clear
 
-REPO="$HOME/endeos"
+REPO="$HOME/arch"
 CFG_PATH="$REPO/.config"
 
 installPackages() {
