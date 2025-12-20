@@ -60,7 +60,8 @@ detect_nvidia() {
 }
 
 install_cosmic() {
-  sudo pacman -S --noconfirm "cosmic" "observatory" "kitty"
+  sudo pacman -S --noconfirm "cosmic" "kitty"
+  yay -S --noconfirm "observatory"
 
   sudo systemctl enable cosmic-greeter
   cp -r "$REPO/Cosmic/.config" "$HOME"
