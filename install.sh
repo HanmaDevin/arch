@@ -210,10 +210,10 @@ installPackages
 installYay
 installAurPackages
 
-echo ">>> Which desktop environment do you wich to install?"
-choice=$(gum "Cosmic" "Hyprdev")
+echo ">>> Which desktop environment do you wish to install?"
+choice=$(gum choose "Cosmic" "Hyprdev")
 
-case "$choice" in
+case $choice in
 "Hyprdev")
   install_hyprdev
   ;;
