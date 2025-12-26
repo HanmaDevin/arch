@@ -159,29 +159,33 @@ setopt notify
 setopt numericglobsort
 
 get() {
-  local pkg_names
+  if [[ -z "$1" ]]; then
+    local pkg_names
 
-  fzf_args=(
-  --multi
-  --preview 'yay -Sii {1}'
-  --preview-label='alt-p: toggle description, alt-b/B: toggle PKGBUILD, alt-j/k: scroll, tab: multi-select'
-  --preview-label-pos='bottom'
-  --preview-window 'down:65%:wrap'
-  --bind 'alt-p:toggle-preview'
-  --bind 'alt-d:preview-half-page-down,alt-u:preview-half-page-up'
-  --bind 'alt-k:preview-up,alt-j:preview-down'
-  --bind 'alt-b:change-preview:yay -Gpa {1} | tail -n +5'
-  --bind 'alt-B:change-preview:yay -Siia {1}'
-  --color 'pointer:green,marker:green'
-  )
+    fzf_args=(
+    --multi
+    --preview 'yay -Sii {1}'
+    --preview-label='alt-p: toggle description, alt-b/B: toggle PKGBUILD, alt-j/k: scroll, tab: multi-select'
+    --preview-label-pos='bottom'
+    --preview-window 'down:65%:wrap'
+    --bind 'alt-p:toggle-preview'
+    --bind 'alt-d:preview-half-page-down,alt-u:preview-half-page-up'
+    --bind 'alt-k:preview-up,alt-j:preview-down'
+    --bind 'alt-b:change-preview:yay -Gpa {1} | tail -n +5'
+    --bind 'alt-B:change-preview:yay -Siia {1}'
+    --color 'pointer:green,marker:green'
+    )
 
-  pkg_names=$(yay -Slq | fzf "${fzf_args[@]}")
+    pkg_names=$(yay -Slq | fzf "${fzf_args[@]}")
 
-  if [[ -n "$pkg_names" ]]; then
-    # Convert newline-separated selections to space-separated for yay
-    echo "$pkg_names" | tr '\n' ' ' | xargs yay -S --noconfirm
-    echo
-    gum spin --spinner "globe" --title "Done! Press any key to close..." -- bash -c 'read -n 1 -s'
+    if [[ -n "$pkg_names" ]]; then
+      # Convert newline-separated selections to space-separated for yay
+      echo "$pkg_names" | tr '\n' ' ' | xargs yay -S --noconfirm
+      echo
+      gum spin --spinner "globe" --title "Done! Press any key to close..." -- bash -c 'read -n 1 -s'
+    fi
+  else
+    yay -S --noconfirm "$@"
   fi
 }
 

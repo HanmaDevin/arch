@@ -39,23 +39,24 @@ installYay() {
 }
 
 detect_nvidia() {
-  local gpu
-  gpu=$(lspci | grep -i '.* vga .* nvidia .*')
+  if ! command -v nvidia-smi >/dev/null 2>&1; then
+    local gpu
+    gpu=$(lspci | grep -i '.* vga .* nvidia .*')
 
-  shopt -s nocasematch
+    shopt -s nocasematch
 
-  if [[ $gpu == *' nvidia '* ]]; then
-    echo ">>> Nvidia GPU is present"
-    if [[ ! "$(uname -r)" =~ "lts" ]]; then
-      gum spin --spinner dot --title "Installaling nvidia drivers now..." -- sleep 2
-      sudo pacman -S --noconfirm nvidia nvidia-utils nvidia-settings
-    else
-      gum spin --spinner dot --title "Installaling nvidia drivers now..." -- sleep 2
-      sudo pacman -S --noconfirm nvidia-lts nvidia-utils nvidia-settings
+    if [[ $gpu == *' nvidia '* ]]; then
+      echo ">>> Nvidia GPU is present"
+      if [[ ! "$(uname -r)" =~ "lts" ]]; then
+        gum spin --spinner dot --title "Installaling nvidia drivers now..." -- sleep 2
+        sudo pacman -S --noconfirm nvidia nvidia-utils nvidia-settings
+      else
+        gum spin --spinner dot --title "Installaling nvidia drivers now..." -- sleep 2
+        sudo pacman -S --noconfirm nvidia-lts nvidia-utils nvidia-settings
+      fi
     fi
   else
-    echo ">>> It seems you are not using a Nvidia GPU"
-    echo ">>> If you have a Nvidia GPU then download the drivers yourself please :)"
+    echo ">>> Nvidia drivers already installed"
   fi
 }
 
@@ -212,7 +213,7 @@ installYay
 installAurPackages
 
 echo ">>> Which desktop environment do you wish to install?"
-choice=$(gum choose "Cosmic" "Hyprdev")
+choice=$(gum choose "Cosmic" "Hyprdev" "None")
 
 case $choice in
 "Hyprdev")
