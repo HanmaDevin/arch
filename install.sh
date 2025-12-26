@@ -22,7 +22,7 @@ installPackages() {
 }
 
 installAurPackages() {
-  local packages=("google-chrome" "localsend-bin" "ufw-docker" "xwaylandvideobridge" "openvpn-update-systemd-resolved" "lazydocker" "qt-heif-image-plugin" "luajit-tiktoken-bin" "ani-cli")
+  local packages=("google-chrome" "localsend-bin" "ufw-docker" "openvpn-update-systemd-resolved" "lazydocker" "qt-heif-image-plugin" "luajit-tiktoken-bin" "ani-cli")
   for pkg in "${packages[@]}"; do
     yay -S --noconfirm "$pkg"
   done
